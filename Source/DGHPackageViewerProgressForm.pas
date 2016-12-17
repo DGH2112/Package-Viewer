@@ -1,3 +1,15 @@
+(**
+
+  This module contains a class which presents a progress form for displaying the progress of
+  load packages from the IDE for browsing.
+
+  @Author  David Hoyle
+  @Version 1.0
+  @Date    17 Dec 2016
+
+  @stopdocumentation
+
+**)
 Unit DGHPackageViewerProgressForm;
 
 Interface

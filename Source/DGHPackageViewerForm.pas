@@ -1,4 +1,15 @@
-//: @stopdocumentation
+(**
+
+  This module contains a class which repesents a form for browsing the packages loaded into the
+  RAD Studio IDE in a tree format.
+
+  @Author  David Hoyle
+  @Version 1.0
+  @Date    17 Dec 2016
+
+  @stopdocumentation
+
+**)
 Unit DGHPackageViewerForm;
 
 Interface

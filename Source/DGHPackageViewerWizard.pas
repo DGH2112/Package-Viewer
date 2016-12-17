@@ -1,4 +1,16 @@
-//: @stopdocumentation
+(**
+
+  This module contains a class that implements the IOTAWizard and IOTAmenuWizard interfaces to
+  create a wizard / expert / plugin that can be loaded by the RAD Studio IDE to provide the
+  ability to browse the pcakages loaded in the IDE.
+
+  @Author  David Hoyle
+  @Version 1.0
+  @Date    17 Dec 2016
+
+  @stopdocumentation
+
+**)
 Unit DGHPackageViewerWizard;
 
 Interface
