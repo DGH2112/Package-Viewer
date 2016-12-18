@@ -15,7 +15,7 @@ Unit DGHPackageViewerWizard;
 
 Interface
 
-{$INCLUDE ..\..\..\Library\CompilerDefinitions.inc}
+{$INCLUDE CompilerDefinitions.inc}
 
 {$R ..\Images\SplashScreenImages.RES ..\Images\SplashScreenImages.RC}
 

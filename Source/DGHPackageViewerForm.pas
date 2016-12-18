@@ -29,7 +29,7 @@ Uses
   StdCtrls,
   Buttons;
 
-{$INCLUDE ..\..\..\Library\CompilerDefinitions.inc}
+{$INCLUDE CompilerDefinitions.inc}
 
 
 Type

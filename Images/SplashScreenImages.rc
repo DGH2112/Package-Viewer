@@ -1,3 +1,2 @@
-SplashScreen48 BITMAP "Package48.bmp"
-SplashScreen24 BITMAP "Package24.bmp"
-
+SplashScreen48 BITMAP "SplashScreenImage48x48.bmp"
+SplashScreen24 BITMAP "SplashScreenImage24x24.bmp"
