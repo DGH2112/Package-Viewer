@@ -36,6 +36,8 @@ Type
   TfrmDGHPackageViewer = Class(TForm)
     tvPackages: TTreeView;
     btnLoad: TBitBtn;
+    btnFind: TBitBtn;
+    dlgFind: TFindDialog;
     Procedure FormCreate(Sender: TObject);
     Procedure FormDestroy(Sender: TObject);
     Procedure FormShow(Sender: TObject);
@@ -44,6 +46,8 @@ Type
     Procedure tvPackagesAdvancedCustomDrawItem(Sender: TCustomTreeView; Node: TTreeNode;
       State: TCustomDrawState; Stage: TCustomDrawStage; Var PaintImages,
       DefaultDraw: Boolean);
+    procedure btnFindClick(Sender: TObject);
+    procedure dlgFindFind(Sender: TObject);
   Private
     {Private declarations}
     Procedure LoadSettings;
@@ -64,12 +68,21 @@ Implementation
 
 Uses
   Registry,
+  {$IFDEF DXE00}
+  RegularExpressions,
+  {$ENDIF}
   DGHPackageViewerProgressForm;
 
 Const
   strRegistryKey = 'Software\Season''s Fall\Package Viewer\';
 
 {TfrmDGHPackageViewer}
+
+Procedure TfrmDGHPackageViewer.btnFindClick(Sender: TObject);
+
+Begin
+  dlgFind.Execute(Handle);
+End;
 
 Procedure TfrmDGHPackageViewer.btnLoadClick(Sender: TObject);
 
@@ -116,6 +129,40 @@ Begin
       tvPackages.Invalidate;
     End;
   {$ENDIF}
+End;
+
+Procedure TfrmDGHPackageViewer.dlgFindFind(Sender: TObject);
+
+Var
+  N: TTreeNode;
+  {$IFDEF DXE00}
+  RE : TRegEx;
+  {$ENDIF}
+
+Begin
+  {$IFDEF DXE00}
+  RE.Create(dlgFind.FindText);
+  {$ENDIF}
+  N := tvPackages.Selected;
+  If N = Nil Then
+    N := tvPackages.Items.GetFirstNode;
+  N := N.GetNext;
+  While N <> Nil Do
+    Begin
+      {$IFDEF DXE00}
+      If RE.IsMatch(N.Text) Then
+      {$ELSE}
+      If Pos(LowerCase(dlgFind.FindText), LowerCase(N.Text)) > 0 Then
+      {$ENDIF}
+        Begin
+          tvPackages.Selected := N;
+          N.Focused := True;
+          Break;
+        End;
+      N := N.GetNext;
+    End;
+  If N = Nil Then
+    ShowMessage(Format('Find text "%s" not found!', [dlgFind.FindText]));
 End;
 
 Class Procedure TfrmDGHPackageViewer.Execute;
@@ -201,7 +248,7 @@ Begin
     Finally
       frm.Free;
     End;
-    tvPackages.AlphaSort(False);
+    tvPackages.AlphaSort(True);
   Finally
     tvPackages.Items.EndUpdate;
   End;
