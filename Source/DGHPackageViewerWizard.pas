@@ -135,7 +135,7 @@ Begin
     FAboutPluginIndex := (BorlandIDEServices As IOTAAboutBoxServices).AddPluginInfo(
       Format(strSplashScreenName, [iMajor, iMinor, Copy(strRevision, iBugFix + 1, 1),
         Application.Title]),
-     'An IDE Expert to allow you to browse the loaled packages in the IDE.',
+     'An IDE Expert to allow you to browse the loaded packages in the IDE.',
      FSplashScreen48,
      False,
      Format(strSplashScreenBuild, [iMajor, iMinor, iBugfix, iBuild]),

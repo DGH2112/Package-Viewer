@@ -1,0 +1,11 @@
+{
+   "id":"{12C85BA3-B633-409B-976B-09A46C2C84E7}",
+   "name":"Package Viewer",
+   "license_type":"[custom]",
+   "license_file":"License.md",
+   "platforms":"Win32",
+   "package_compiler_min":18,
+   "package_compiler_max":32,
+   "compiler_min":18,
+   "compiler_max":32
+}
