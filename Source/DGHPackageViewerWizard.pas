@@ -5,7 +5,7 @@
   ability to browse the pcakages loaded in the IDE.
 
   @Author  David Hoyle
-  @Version 1.005
+  @Version 1.103
   @Date    08 Oct 2020
 
   @stopdocumentation
@@ -54,7 +54,14 @@ Type
     Function  GetMenuText: String;
   End;
 
-Procedure Register;
+  Procedure Register;
+
+  Function InitWizard(Const BorlandIDEServices : IBorlandIDEServices;
+    RegisterProc : TWizardRegisterProc;
+    var Terminate: TWizardTerminateProc) : Boolean; StdCall;
+
+Exports
+  InitWizard Name WizardEntryPoint;
 
 Implementation
 
@@ -71,6 +78,33 @@ ResourceString
   strSplashScreenName = 'DGH Package Viewer %d.%d%s for %s';
   strSplashScreenBuild = 'Freeware by David Hoyle (Build %d.%d.%d.%d)';
 {$ENDIF}
+
+(**
+
+  This is a procedure to initialising the wizard interface when loading the
+  package as a DLL wizard.
+
+  @precon  None.
+  @postcon Initialises the wizard.
+
+  @nocheck MissingCONSTInParam
+  @nohint  Terminate
+
+  @param   BorlandIDEServices as an IBorlandIDEServices as a constant
+  @param   RegisterProc       as a TWizardRegisterProc
+  @param   Terminate          as a TWizardTerminateProc as a reference
+  @return  a Boolean
+
+**)
+Function InitWizard(Const BorlandIDEServices : IBorlandIDEServices;
+  RegisterProc : TWizardRegisterProc;
+  var Terminate: TWizardTerminateProc) : Boolean; StdCall;
+
+Begin
+  Result := Assigned(BorlandIDEServices);
+  If Result Then
+    RegisterProc(TDGHPackageViewerWizard.Create);
+End;
 
 Procedure Register;
 
