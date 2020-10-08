@@ -1,0 +1,30 @@
+LANGUAGE LANG_ENGLISH,SUBLANG_ENGLISH_US
+
+1 VERSIONINFO LOADONCALL MOVEABLE DISCARDABLE IMPURE
+FILEVERSION 1, 0, 4, 124
+PRODUCTVERSION 1, 0, 4, 124
+FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+FILEOS VOS__WINDOWS32
+FILETYPE VFT_APP
+{
+  BLOCK "StringFileInfo"
+  {
+    BLOCK "040904E4"
+    {
+      VALUE "CompanyName", "Season's Fall Music\000"
+      VALUE "FileDescription", "DGHPackageViewer: An IDE Expert to allow you to browse the loaded packages in the IDE.\000"
+      VALUE "FileVersion", "1.0.4.124\000"
+      VALUE "InternalName", "DGHPackageViewer\000"
+      VALUE "LegalCopyright", "Season's Fall Music\000"
+      VALUE "LegalTrademarks", "Season's Fall Music\000"
+      VALUE "OriginalFilename", "DGHPackageViewer\000"
+      VALUE "ProductName", "DGHPackageViewer\000"
+      VALUE "ProductVersion", "1.0d\000"
+      VALUE "Comments", "DGHPackageViewer: An IDE Expert to allow you to browse the loaded packages in the IDE.\000"
+    }
+  }
+  BLOCK "VarFileInfo"
+  {
+    VALUE "Translation", 1033, 1252
+  }
+}
