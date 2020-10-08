@@ -21,6 +21,8 @@ uses
 
 {$R *.res}
 
+{$INCLUDE 'Source\CompilerDefinitions.inc'}
+{$INCLUDE 'Source\LibrarySuffixes.inc'}
 
 Begin
 
