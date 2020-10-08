@@ -5,8 +5,8 @@
   ability to browse the pcakages loaded in the IDE.
 
   @Author  David Hoyle
-  @Version 1.0
-  @Date    17 Dec 2016
+  @Version 1.005
+  @Date    08 Oct 2020
 
   @stopdocumentation
 
@@ -16,10 +16,7 @@ Unit DGHPackageViewerWizard;
 Interface
 
 {$INCLUDE CompilerDefinitions.inc}
-
 {$R ..\Images\SplashScreenImages.RES ..\Images\SplashScreenImages.RC}
-
-{$R ..\Packages\ITHelperVersionInfo.RES}
 
 Uses
   ToolsAPI,

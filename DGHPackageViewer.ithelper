@@ -9,29 +9,42 @@ IncludeInProject=1
 CompileWithBRCC32=0
 MajorVer=1
 MinorVer=0
-ReleaseVer=3
-BuildVer=117
+ReleaseVer=4
+BuildVer=120
 ResourceName=ITHelperVersionInfo
+IncBuild.Make.Release=0
+IncBuild.Build.Release=0
+IncBuild.Check.Release=0
+IncBuild.MakeUnit.Release=0
+IncBuild.Make.Base=0
+IncBuild.Build.Base=0
+IncBuild.Check.Base=0
+IncBuild.MakeUnit.Base=0
+IncBuild.Make.Debug=2
+IncBuild.Build.Debug=2
+IncBuild.Check.Debug=0
+IncBuild.MakeUnit.Debug=0
+SaveModifiedFilesBeforeZipping=0
 
 [Zipping]
 Enabled=1
-ZipFile=D:\HoylD\Web Page\Zips\DGHPackageViewer.zip
-BasePath=D:\HoylD\RAD Studio\
+ZipFile=D:\Documents\Web Page\Zips\DGHPackageViewer.zip
+BasePath=D:\Documents\RAD Studio\
 ExclusionFiles=
 
 [VersionInfo]
 CompanyName=Season's Fall Music
 FileDescription=DGHPackageViewer: An IDE Expert to allow you to browse the loaded packages in the IDE.
-FileVersion=1.0.3.117
+FileVersion=1.0.4.120
 InternalName=DGHPackageViewer
 LegalCopyright=Season's Fall Music
 LegalTrademarks=Season's Fall Music
 OriginalFilename=DGHPackageViewer
 ProductName=DGHPackageViewer
-ProductVersion=1.0a
+ProductVersion=1.0d
 Comments=DGHPackageViewer: An IDE Expert to allow you to browse the loaded packages in the IDE.
 
 [Additional Zip Files]
-Item0=D:\HoylD\RAD Studio\IDE Addins\Package Viewer\Images\*.bmp
-Item1=D:\HoylD\RAD Studio\IDE Addins\Package Viewer\*.bpl
+Item0=D:\Documents\RAD Studio\IDE Addins\Package Viewer\Images\*.bmp
+Item1=D:\Documents\RAD Studio\IDE Addins\Package Viewer\*.bpl
 
