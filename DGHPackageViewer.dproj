@@ -116,6 +116,9 @@
         <DCCReference Include="Source\DGHPackageViewerAboutBox.pas"/>
         <None Include="Source\CompilerDefinitions.inc"/>
         <None Include="Source\LibrarySuffixes.inc"/>
+        <None Include="License.md"/>
+        <None Include="README.md"/>
+        <None Include="Contributing.md"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
