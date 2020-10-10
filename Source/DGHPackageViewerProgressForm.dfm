@@ -13,6 +13,7 @@ object frmDGHPackageViewerProgress: TfrmDGHPackageViewerProgress
   Font.Style = []
   OldCreateOrder = False
   Position = poMainFormCenter
+  OnCreate = FormCreate
   DesignSize = (
     477
     37)

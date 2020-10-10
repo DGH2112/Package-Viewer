@@ -4,8 +4,8 @@
    "license_type":"[custom]",
    "license_file":"License.md",
    "platforms":"Win32",
-   "package_compiler_min":18,
-   "package_compiler_max":32,
-   "compiler_min":18,
-   "compiler_max":32
+   "package_compiler_min":20,
+   "package_compiler_max":34,
+   "compiler_min":20,
+   "compiler_max":34
 }

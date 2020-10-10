@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{EBF566CA-75C6-4BA0-91D6-66BD8CA8EF0A}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="DGHPackageViewer.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="DGHPackageViewer">
+        <MSBuild Projects="DGHPackageViewer.dproj"/>
+    </Target>
+    <Target Name="DGHPackageViewer:Clean">
+        <MSBuild Projects="DGHPackageViewer.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DGHPackageViewer:Make">
+        <MSBuild Projects="DGHPackageViewer.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="DGHPackageViewer"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="DGHPackageViewer:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="DGHPackageViewer:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

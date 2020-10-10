@@ -1,14 +1,31 @@
 (**
 
   This module contains a class that implements the IOTAWizard and IOTAmenuWizard interfaces to
-  create a wizard / expert / plugin that can be loaded by the RAD Studio IDE to provide the
-  ability to browse the pcakages loaded in the IDE.
+  create a wizard / expert / plug-in that can be loaded by the RAD Studio IDE to provide the
+  ability to browse the packages loaded in the IDE.
 
   @Author  David Hoyle
-  @Version 1.0
-  @Date    17 Dec 2016
+  @Version 2.058
+  @Date    10 Oct 2020
 
-  @stopdocumentation
+  @license
+
+    Package Viewer is a RAD Studio plug-in for browsing packages loaded into the IDE.
+    
+    Copyright (C) 2020  David Hoyle (https://github.com/DGH2112/Browse-and-Doc-It/)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 **)
 Unit DGHPackageViewerWizard;
@@ -16,117 +33,105 @@ Unit DGHPackageViewerWizard;
 Interface
 
 {$INCLUDE CompilerDefinitions.inc}
-
 {$R ..\Images\SplashScreenImages.RES ..\Images\SplashScreenImages.RC}
-
-{$R ..\Packages\ITHelperVersionInfo.RES}
 
 Uses
   ToolsAPI,
   Windows;
 
 Type
-  TVersionInfo = Record
-    iMajor : Integer;
-    iMinor : Integer;
-    iBugfix : Integer;
-    iBuild : Integer;
-  End;
-
-  TDGHPackageViewerWizard = Class(TInterfacedObject, IOTANotifier, IOTAWizard,
-    IOTAMenuWizard)
+  (** A class to define a plug-in wizard for the RAD Studio IDE to allow the user view the packages
+      loaded into the IDE. **)
+  TDGHPackageViewerWizard = Class(TNotifierObject, IUnknown, IOTANotifier, IOTAWizard, IOTAMenuWizard)
   Strict Private
-    {$IFDEF D2005}
-    FVersionInfo      : TVersionInfo;
-    FSplashScreen48   : HBITMAP;
-    FSplashScreen24   : HBITMAP;
     FAboutPluginIndex : Integer;
-    {$ENDIF}
-  Strict Protected
-  Public
-    Constructor Create;
-    Destructor Destroy; Override;
+  {$IFDEF D2010} Strict {$ENDIF D2010} Protected
+    // IOTAWizard
     Procedure Execute;
     Function  GetIDString: String;
     Function  GetName: String;
     Function  GetState: TWizardState;
-    Procedure AfterSave;
-    Procedure BeforeSave;
-    Procedure Destroyed;
-    Procedure Modified;
+    // IOTAMenuWizard
     Function  GetMenuText: String;
+  Public
+    Constructor Create;
+    Destructor Destroy; Override;
   End;
 
-Procedure Register;
+  Procedure Register;
+
+  Function InitWizard(Const BorlandIDEServices : IBorlandIDEServices;
+    RegisterProc : TWizardRegisterProc;
+    var Terminate: TWizardTerminateProc) : Boolean; StdCall;
+
+Exports
+  InitWizard Name WizardEntryPoint;
 
 Implementation
 
 Uses
   DGHPackageViewerForm,
   SysUtils,
-  Forms;
+  Forms,
+  DGHPackageViewerSplashScreen,
+  DGHPackageViewerFunctions,
+  DGHPackageViewerResourceStrings,
+  DGHPackageViewerConstants,
+  DGHPackageViewerAboutBox;
 
-{$IFDEF D2005}
-Const
-  strRevision : String = ' abcdefghijklmnopqrstuvwxyz';
+(**
 
-ResourceString
-  strSplashScreenName = 'DGH Package Viewer %d.%d%s for %s';
-  strSplashScreenBuild = 'Freeware by David Hoyle (Build %d.%d.%d.%d)';
-{$ENDIF}
+  This is a procedure to initialising the wizard interface when loading the
+  package as a DLL wizard.
 
+  @precon  None.
+  @postcon Initialises the wizard.
+
+  @nocheck MissingCONSTInParam
+  @nohint  Terminate
+
+  @param   BorlandIDEServices as an IBorlandIDEServices as a constant
+  @param   RegisterProc       as a TWizardRegisterProc
+  @param   Terminate          as a TWizardTerminateProc as a reference
+  @return  a Boolean
+
+**)
+Function InitWizard(Const BorlandIDEServices : IBorlandIDEServices;
+  RegisterProc : TWizardRegisterProc;
+  var Terminate: TWizardTerminateProc) : Boolean; StdCall;
+
+Begin
+  Result := Assigned(BorlandIDEServices);
+  If Result Then
+    RegisterProc(TDGHPackageViewerWizard.Create);
+End;
+
+(**
+
+  This method registers the plug-in with the RAD Studio IDE if the plug-in is built as a package.
+
+  @precon  None.
+  @postcon The plug-in is registered with the RAD Studio IDE.
+
+**)
 Procedure Register;
 
 Begin
   RegisterPackageWizard(TDGHPackageViewerWizard.Create);
 End;
 
-{$IFDEF D2005}
-Procedure BuildNumber(Var VersionInfo: TVersionInfo);
+(**
 
-Var
-  VerInfoSize: DWORD;
-  VerInfo: Pointer;
-  VerValueSize: DWORD;
-  VerValue: PVSFixedFileInfo;
-  Dummy: DWORD;
-  strBuffer: Array [0 .. MAX_PATH] Of Char;
+  A constructor for the TDGHPackageViewerWizard class.
 
-Begin
-  GetModuleFileName(hInstance, strBuffer, MAX_PATH);
-  VerInfoSize := GetFileVersionInfoSize(strBuffer, Dummy);
-  If VerInfoSize <> 0 Then
-    Begin
-      GetMem(VerInfo, VerInfoSize);
-      Try
-        GetFileVersionInfo(strBuffer, 0, VerInfoSize, VerInfo);
-        VerQueryValue(VerInfo, '\', Pointer(VerValue), VerValueSize);
-        VersionInfo.iMajor  := VerValue^.dwFileVersionMS Shr 16;
-        VersionInfo.iMinor  := VerValue^.dwFileVersionMS And $FFFF;
-        VersionInfo.iBugfix := VerValue^.dwFileVersionLS Shr 16;
-        VersionInfo.iBuild  := VerValue^.dwFileVersionLS And $FFFF;
-      Finally
-        FreeMem(VerInfo, VerInfoSize);
-      End;
-  End;
-End;
-{$ENDIF}
+  @precon  None.
+  @postcon Installs the splash screen entry and the about box entry into the IDE.
 
-{ TDGHPackageViewerWizard }
-
-Procedure TDGHPackageViewerWizard.AfterSave;
-
-Begin
-End;
-
-Procedure TDGHPackageViewerWizard.BeforeSave;
-
-Begin
-End;
-
+**)
 Constructor TDGHPackageViewerWizard.Create;
 
 Begin
+<<<<<<< HEAD
   {$IFDEF D2005}
   FAboutPluginIndex := -1;
   BuildNumber(FVersionInfo);
@@ -153,56 +158,112 @@ Begin
       False,
       Format(strSplashScreenBuild, [iMajor, iMinor, iBugfix, iBuild]));
   {$ENDIF}
+=======
+  FAboutPluginIndex := AddAboutBox();
+  AddSplashScreen();
+>>>>>>> Release/1.0d
 End;
 
+(**
+
+  A destructor for the TDGHPackageViewerWizard class.
+
+  @precon  None.
+  @postcon Removes the About Box from the IDE.
+
+**)
 Destructor TDGHPackageViewerWizard.Destroy;
 
 Begin
-  {$IFDEF D2005}
-  If FAboutPluginIndex > -1 Then
-    (BorlandIDEServices As IOTAAboutBoxServices).RemovePluginInfo(FAboutPluginIndex);
-  {$ENDIF}
+  RemoveAboutBox(FAboutPluginIndex);
   Inherited Destroy;
 End;
 
-Procedure TDGHPackageViewerWizard.Destroyed;
+(**
 
-Begin
-End;
+  This method invokes the packages viewer.
 
+  @precon  None.
+  @postcon The package viewer is displayed.
+
+**)
 Procedure TDGHPackageViewerWizard.Execute;
 
 Begin
   TfrmDGHPackageViewer.Execute;
 End;
 
+(**
+
+  This is a getter method for the IDString property.
+
+  @precon  None.
+  @postcon Returns the unique ID String for the plug-in.
+
+  @return  a String
+
+**)
 Function TDGHPackageViewerWizard.GetIDString: String;
 
+Const
+  strPluginIDString = 'DGHPackageViewerWizard.David Hoyle';
+
 Begin
-  Result := 'DGHPackageViewerWizard.David Hoyle';
+  Result := strPluginIDString;
 End;
 
+(**
+
+  This is a getter method for the Menu Text property.
+
+  @precon  None.
+  @postcon Returns the text of the menu to invoke the Package Viewer under the Help Wizard menu.
+
+  @return  a String
+
+**)
 Function TDGHPackageViewerWizard.GetMenuText: String;
 
+ResourceString
+  strPackageViewerMenuText = 'Package Viewer';
+
 Begin
-  Result := 'Package Viewer';
+  Result := strPackageViewerMenuText;
 End;
 
+(**
+
+  This is a getter method for the Name property.
+
+  @precon  None.
+  @postcon Returns the name of the wizard.
+
+  @return  a String
+
+**)
 Function TDGHPackageViewerWizard.GetName: String;
 
+Const
+  strPluginName = 'DGHPackageViewer';
+
 Begin
-  Result := 'DGHPackageViewer';
+  Result := strPluginName;
 End;
 
+(**
+
+  This is a getter method for the State property.
+
+  @precon  None.
+  @postcon Returns that the wizard is enabled.
+
+  @return  a TWizardState
+
+**)
 Function TDGHPackageViewerWizard.GetState: TWizardState;
 
 Begin
   Result := [wsEnabled];
-End;
-
-Procedure TDGHPackageViewerWizard.Modified;
-
-Begin
 End;
 
 End.

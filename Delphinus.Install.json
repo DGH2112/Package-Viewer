@@ -24,48 +24,56 @@
    ],
    "projects":[
       {
-         "project":"Packages\\DGHPackageViewerXE.dpk",
+         "project":"DGHPackageViewer.dpr",
          "compiler":22
       },
       {
-         "project":"Packages\\DGHPackageViewerXE2.dpk",
+         "project":"DGHPackageViewer.dpr",
          "compiler":23
       },
       {
-         "project":"Packages\\DGHPackageViewerXE3.dpk",
+         "project":"DGHPackageViewer.dpr",
          "compiler":24
       },
       {
-         "project":"Packages\\DGHPackageViewerXE4.dpk",
+         "project":"DGHPackageViewer.dpr",
          "compiler":25
       },
       {
-         "project":"Packages\\DGHPackageViewerXE5.dpk",
+         "project":"DGHPackageViewer.dpr",
          "compiler":26
       },
       {
-         "project":"Packages\\DGHPackageViewerXE6.dpk",
+         "project":"DGHPackageViewer.dpr",
          "compiler":27
       },
       {
-         "project":"Packages\\DGHPackageViewerXE7.dpk",
+         "project":"DGHPackageViewer.dpr",
          "compiler":28
       },
       {
-         "project":"Packages\\DGHPackageViewerXE8.dpk",
+         "project":"DGHPackageViewer.dpr",
          "compiler":29
       },
       {
-         "project":"Packages\\DGHPackageViewerXE10.dpk",
+         "project":"DGHPackageViewer.dpr",
          "compiler":30
       },
       {
-         "project":"Packages\\DGHPackageViewerXE101.dproj",
+         "project":"DGHPackageViewer.dpr",
          "compiler":31
       },
       {
-         "project":"Packages\\DGHPackageViewerXE102.dproj",
+         "project":"DGHPackageViewer.dpr",
          "compiler":32
+      },
+      {
+         "project":"DGHPackageViewer.dpr",
+         "compiler":33
+      },
+      {
+         "project":"DGHPackageViewer.dpr",
+         "compiler":34
       }
    ]
 }
