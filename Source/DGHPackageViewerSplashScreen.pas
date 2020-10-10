@@ -3,7 +3,7 @@
   This module contains the code to add a splash screen entry to the RAD Studio IDE.
 
   @Author  David Hoyle
-  @Version 1.038
+  @Version 1.040
   @Date    10 Oct 2020
   
 **)
@@ -49,7 +49,7 @@ Var
   SSS : IOTASplashScreenServices;
   
 Begin
-  BuildNumber(VersionInfo);
+  TPackageViewerFunctions.BuildNumber(VersionInfo);
   bmSplashScreen := LoadBitmap(hInstance, strDGHPackageViewerSplashScreenBitMap);
   If Supports(SplashScreenServices, IOTASplashScreenServices, SSS) Then
     SSS.AddPluginBitmap(

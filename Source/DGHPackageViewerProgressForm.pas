@@ -4,8 +4,8 @@
   load packages from the IDE for browsing.
 
   @Author  David Hoyle
-  @Version 1.085
-  @Date    08 Oct 2020
+  @Version 1.115
+  @Date    10 Oct 2020
 
 **)
 Unit DGHPackageViewerProgressForm;
@@ -28,6 +28,7 @@ Type
   (** A class to represent a progress form for loading package information. **)
   TfrmDGHPackageViewerProgress = Class(TForm)
     pbProgress: TProgressBar;
+    procedure FormCreate(Sender: TObject);
   Strict Private
   Strict Protected
   Public
@@ -39,6 +40,16 @@ Type
 Implementation
 
 {$R *.dfm}
+
+Uses
+  DGHPackageViewerFunctions;
+
+Procedure TfrmDGHPackageViewerProgress.FormCreate(Sender: TObject);
+
+Begin
+  TPackageViewerFunctions.RegisterFormClassForTheming(TfrmDGHPackageViewerProgress);
+  TPackageViewerFunctions.ApplyTheming(Self);
+End;
 
 (**
 

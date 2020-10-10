@@ -3,7 +3,7 @@
   This module contains code to installed and un-install an about box in the RAD Studio IDE.
 
   @Author  David Hoyle
-  @Version 1.075
+  @Version 1.078
   @Date    10 Oct 2020
   
 **)
@@ -48,7 +48,7 @@ Var
 
 Begin
   Result := -1;
-  BuildNumber(VersionInfo);
+  TPackageViewerFunctions.BuildNumber(VersionInfo);
   bmSplashScreen := LoadBitmap(hInstance, strSplashScreen);
   If Supports(BorlandIDEServices, IOTAAboutBoxServices, ABS) Then
     Result := ABS.AddPluginInfo(

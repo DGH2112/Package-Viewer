@@ -4,7 +4,7 @@
   RAD Studio IDE in a tree format.
 
   @Author  David Hoyle
-  @Version 1.630
+  @Version 1.731
   @Date    10 Oct 2020
 
 **)
@@ -25,7 +25,8 @@ Uses
   Dialogs,
   ComCtrls,
   StdCtrls,
-  Buttons;
+  Buttons,
+  Themes;
 
 {$INCLUDE CompilerDefinitions.inc}
 
@@ -47,6 +48,9 @@ Type
     procedure btnFindClick(Sender: TObject);
     procedure dlgFindFind(Sender: TObject);
   Strict Private
+    {$IFDEF DXE102}
+    FStyleServices : TCustomStyleServices;
+    {$ENDIF DXE102}
   Strict Protected
     Procedure LoadSettings;
     Procedure SaveSettings;
@@ -69,7 +73,7 @@ Uses
   {$IFDEF DXE00}
   RegularExpressions,
   {$ENDIF}
-  DGHPackageViewerProgressForm;
+  DGHPackageViewerProgressForm, DGHPackageViewerFunctions;
 
 Const
   (** A constant to define the registry key under which the package viewer loads and saves its
@@ -256,12 +260,25 @@ End;
 **)
 Procedure TfrmDGHPackageViewer.FormCreate(Sender: TObject);
 
+{$IFDEF DXE102}
+Var
+  ITS : IOTAIDEThemingServices;
+{$ENDIF DXE102}
+  
 Begin
   DoubleBuffered := True;
   {$IFDEF D2009}
   tvPackages.ParentDoubleBuffered := True;
   {$ENDIF}
   LoadSettings;
+  TPackageViewerFunctions.RegisterFormClassForTheming(TfrmDGHPackageViewer);
+  TPackageViewerFunctions.ApplyTheming(Self);
+  {$IFDEF DXE102}
+  FStyleServices := Nil;
+  If Supports(BorlandIDEServices, IOTAIDEThemingServices, ITS) Then
+    If ITS.IDEThemingEnabled Then
+      FStyleServices := ITS.StyleServices;
+  {$ENDIF DXE102}
 End;
 
 (**
@@ -549,14 +566,22 @@ Var
 Begin
   DefaultDraw := True;
   {$IFDEF DXE00}
-  If Node.Data <> Nil Then
+  If Assigned(Node.Data) Then
     Begin
       iPackage := Integer(Node.Data);
       APackage := (BorlandIDEServices As IOTAPAckageServices).Package[iPackage];
+      Sender.Brush.Color := clWindow;
       If APackage.Loaded Then
-        Sender.Canvas.font.Color := clWindowText
+        Sender.Canvas.Font.Color := clWindowText
       Else
-        Sender.Canvas.font.Color := clGrayText;
+        Sender.Canvas.Font.Color := clGrayText;
+      {$IFDEF DXE102}
+      If Assigned(FStyleServices) Then
+        Begin
+          Sender.Canvas.Brush.Color := FStyleServices.GetSystemColor(Sender.Canvas.Brush.Color);
+          Sender.Canvas.Font.Color := FStyleServices.GetSystemColor(Sender.Canvas.Font.Color);
+        End;
+      {$ENDIF DXE102}
     End;
   {$ENDIF}
 End;

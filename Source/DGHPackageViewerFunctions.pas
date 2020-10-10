@@ -3,13 +3,19 @@
   This module contains functions for use throughout the application.
 
   @Author  David Hoyle
-  @Version 1.016
+  @Version 1.241
   @Date    10 Oct 2020
   
 **)
 Unit DGHPackageViewerFunctions;
 
 Interface
+
+{$INCLUDE CompilerDefinitions.inc}
+
+Uses
+  Classes,
+  Forms;
 
 Type
   (** A record to describe the version information for the plug-in. **)
@@ -20,12 +26,47 @@ Type
     iBuild : Integer;
   End;
 
-  Procedure BuildNumber(Var VersionInfo: TVersionInfo);
+  (** A record to encapsulate the functions. **)
+  TPackageViewerFunctions = Record
+  Strict Private
+  Public
+    Class Procedure BuildNumber(Var VersionInfo: TVersionInfo); Static;
+    Class Procedure RegisterFormClassForTheming(Const AFormClass : TCustomFormClass;
+      Const Component : TComponent = Nil); Static;
+    Class Procedure ApplyTheming(Const Component : TComponent); Static;
+  End;
   
 Implementation
 
 Uses
+  ToolsAPI,
+  SysUtils,
   Windows;
+
+(**
+
+  This method apply theming to the given component if theming is enabled and available.
+
+  @precon  None.
+  @postcon The component is themed if theming is available and enabled.
+
+  @param   Component as a TComponent as a constant
+
+**)
+Class Procedure TPackageViewerFunctions.ApplyTheming(Const Component: TComponent);
+
+{$IFDEF DXE102}
+Var
+  ITS : IOTAIDEThemingServices;
+{$ENDIF DXE102}
+  
+Begin
+  {$IFDEF DXE102}
+  If Supports(BorlandIDEServices, IOTAIDEThemingServices, ITS) Then
+    If ITS.IDEThemingEnabled Then
+      ITS.ApplyTheme(Component);
+  {$ENDIF DXE102}
+End;
 
 (**
 
@@ -38,7 +79,7 @@ Uses
   @param   VersionInfo as a TVersionInfo as a reference
 
 **)
-Procedure BuildNumber(Var VersionInfo: TVersionInfo);
+Class Procedure TPackageViewerFunctions.BuildNumber(Var VersionInfo: TVersionInfo);
 
 Const
   iWORDMask = $FFFF;
@@ -69,6 +110,45 @@ Begin
         FreeMem(VerInfo, VerInfoSize);
       End;
   End;
+End;
+
+(**
+
+  This method registers the given form class for theming is theming is enabled and available.
+
+  @precon  None.
+  @postcon The form is registered for theming is available and enabled.
+
+  @param   AFormClass as a TCustomFormClass as a constant
+  @param   Component  as a TComponent as a constant
+
+**)
+Class Procedure TPackageViewerFunctions.RegisterFormClassForTheming(Const AFormClass : TCustomFormClass;
+  Const Component : TComponent = Nil);
+
+{$IFDEF DXE102}
+Var
+  {$IFDEF DXE104} // Breaking change to the Open Tools API - They fixed the wrongly defined interface
+  ITS : IOTAIDEThemingServices;
+  {$ELSE}
+  ITS : IOTAIDEThemingServices250;
+  {$ENDIF DXE104}
+{$ENDIF DXE102}
+  
+Begin
+  {$IFDEF DXE102}
+  {$IFDEF DXE104}
+  If Supports(BorlandIDEServices, IOTAIDEThemingServices, ITS) Then
+  {$ELSE}
+  If Supports(BorlandIDEServices, IOTAIDEThemingServices250, ITS) Then
+  {$ENDIF DXE104}
+    If ITS.IDEThemingEnabled Then
+      Begin
+        ITS.RegisterFormClass(AFormClass);
+        If Assigned(Component) Then
+          ITS.ApplyTheme(Component);
+      End;
+  {$ENDIF DXE102}
 End;
 
 End.
