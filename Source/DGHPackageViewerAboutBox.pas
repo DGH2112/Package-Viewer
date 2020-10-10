@@ -3,7 +3,7 @@
   This module contains code to installed and un-install an about box in the RAD Studio IDE.
 
   @Author  David Hoyle
-  @Version 1.078
+  @Version 1.079
   @Date    10 Oct 2020
   
 **)

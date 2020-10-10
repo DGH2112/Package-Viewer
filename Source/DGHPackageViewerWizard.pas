@@ -5,7 +5,7 @@
   ability to browse the packages loaded in the IDE.
 
   @Author  David Hoyle
-  @Version 1.969
+  @Version 1.972
   @Date    10 Oct 2020
 
 **)
@@ -26,7 +26,7 @@ Type
   TDGHPackageViewerWizard = Class(TNotifierObject, IUnknown, IOTANotifier, IOTAWizard, IOTAMenuWizard)
   Strict Private
     FAboutPluginIndex : Integer;
-  Strict Protected
+  {$IFDEF D2010} Strict {$ENDIF D2010} Protected
     // IOTAWizard
     Procedure Execute;
     Function  GetIDString: String;

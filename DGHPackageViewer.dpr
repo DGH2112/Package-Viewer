@@ -25,8 +25,8 @@ Library DGHPackageViewer;
 {$R 'ITHelperVersionInfo.res' 'ITHelperVersionInfo.RC'}
 
 uses
-  System.SysUtils,
-  System.Classes,
+  SysUtils,
+  Classes,
   DGHPackageViewerForm in 'Source\DGHPackageViewerForm.pas' {frmDGHPackageViewer},
   DGHPackageViewerProgressForm in 'Source\DGHPackageViewerProgressForm.pas' {frmDGHPackageViewerProgress},
   DGHPackageViewerWizard in 'Source\DGHPackageViewerWizard.pas',
