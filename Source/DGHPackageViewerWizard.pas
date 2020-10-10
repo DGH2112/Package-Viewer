@@ -5,8 +5,8 @@
   ability to browse the packages loaded in the IDE.
 
   @Author  David Hoyle
-  @Version 1.523
-  @Date    09 Oct 2020
+  @Version 1.862
+  @Date    10 Oct 2020
 
 **)
 Unit DGHPackageViewerWizard;
@@ -25,21 +25,6 @@ Type
       loaded into the IDE. **)
   TDGHPackageViewerWizard = Class(TNotifierObject, IUnknown, IOTANotifier, IOTAWizard, IOTAMenuWizard)
   Strict Private
-    Type
-      (** A record to describe the version information for the plug-in. **)
-      TVersionInfo = Record
-        iMajor : Integer;
-        iMinor : Integer;
-        iBugfix : Integer;
-        iBuild : Integer;
-      End;
-    Const
-      (** A constant to describe the bug fix letters for the version information. **)
-      strRevision : String = ' abcdefghijklmnopqrstuvwxyz';
-  Strict Private
-    FVersionInfo      : TVersionInfo;
-    FSplashScreen48   : HBITMAP;
-    FSplashScreen24   : HBITMAP;
     FAboutPluginIndex : Integer;
   Strict Protected
     // IOTAWizard
@@ -49,8 +34,6 @@ Type
     Function  GetState: TWizardState;
     // IOTAMenuWizard
     Function  GetMenuText: String;
-    // General Method
-    Procedure BuildNumber(Var VersionInfo: TVersionInfo);
   Public
     Constructor Create;
     Destructor Destroy; Override;
@@ -70,13 +53,11 @@ Implementation
 Uses
   DGHPackageViewerForm,
   SysUtils,
-  Forms;
-
-ResourceString
-  (** A resource string for the name of the plug-in in the splash screen and about box. **)
-  strSplashScreenName = 'DGH Package Viewer %d.%d%s for %s';
-  (** A resource string for the description and build information on the splash screen and about box. **)
-  strSplashScreenBuild = 'Freeware by David Hoyle (Build %d.%d.%d.%d)';
+  Forms,
+  DGHPackageViewerSplashScreen,
+  DGHPackageViewerFunctions,
+  DGHPackageViewerResourceStrings,
+  DGHPackageViewerConstants;
 
 (**
 
@@ -121,50 +102,6 @@ End;
 
 (**
 
-  This method extracts the build information from the plug-ins DLL or BPL and returns the information
-  in the var parameter.
-
-  @precon  None.
-  @postcon The version information for the plug-in is returned in the var parameter.
-
-  @param   VersionInfo as a TVersionInfo as a reference
-
-**)
-Procedure TDGHPackageViewerWizard.BuildNumber(Var VersionInfo: TVersionInfo);
-
-Const
-  iWORDMask = $FFFF;
-  iShift16 = 16;
-
-Var
-  VerInfoSize: DWORD;
-  VerInfo: Pointer;
-  VerValueSize: DWORD;
-  VerValue: PVSFixedFileInfo;
-  Dummy: DWORD;
-  strBuffer: Array [0 .. MAX_PATH] Of Char;
-
-Begin
-  GetModuleFileName(hInstance, strBuffer, MAX_PATH);
-  VerInfoSize := GetFileVersionInfoSize(strBuffer, Dummy);
-  If VerInfoSize <> 0 Then
-    Begin
-      GetMem(VerInfo, VerInfoSize);
-      Try
-        GetFileVersionInfo(strBuffer, 0, VerInfoSize, VerInfo);
-        VerQueryValue(VerInfo, '\', Pointer(VerValue), VerValueSize);
-        VersionInfo.iMajor  := VerValue^.dwFileVersionMS Shr iShift16;
-        VersionInfo.iMinor  := VerValue^.dwFileVersionMS And iWORDMask;
-        VersionInfo.iBugfix := VerValue^.dwFileVersionLS Shr iShift16;
-        VersionInfo.iBuild  := VerValue^.dwFileVersionLS And iWORDMask;
-      Finally
-        FreeMem(VerInfo, VerInfoSize);
-      End;
-  End;
-End;
-
-(**
-
   A constructor for the TDGHPackageViewerWizard class.
 
   @precon  None.
@@ -173,62 +110,40 @@ End;
 **)
 Constructor TDGHPackageViewerWizard.Create;
 
-ResourceString
-  strPluginDescription = 'An IDE Expert to allow you to browse the loaded packages in the IDE.';
-  strSKUBuild = 'SKU Build %d.%d.%d.%d';
-
 Const
   strSplashScreen48ImgResName = 'SplashScreen48';
-  strSplashScreen24ImgResName = 'SplashScreen24';
+
+Var
+  VersionInfo      : TVersionInfo;
+  bmSplashScreen48   : HBITMAP;
 
 Begin
   FAboutPluginIndex := -1;
-  BuildNumber(FVersionInfo);
-  FSplashScreen48 := LoadBitmap(hInstance, strSplashScreen48ImgResName);
+  bmSplashScreen48 := LoadBitmap(hInstance, strSplashScreen48ImgResName);
   FAboutPluginIndex := (BorlandIDEServices As IOTAAboutBoxServices).AddPluginInfo(
     Format(strSplashScreenName, [
-      FVersionInfo.iMajor,
-      FVersionInfo.iMinor,
-      Copy(strRevision, FVersionInfo.iBugFix + 1, 1),
+      VersionInfo.iMajor,
+      VersionInfo.iMinor,
+      Copy(strRevision, VersionInfo.iBugFix + 1, 1),
       Application.Title
     ]),
     strPluginDescription,
-    FSplashScreen48,
+    bmSplashScreen48,
     False,
     Format(strSplashScreenBuild, [
-      FVersionInfo.iMajor,
-      FVersionInfo.iMinor,
-      FVersionInfo.iBugfix,
-      FVersionInfo.iBuild
+      VersionInfo.iMajor,
+      VersionInfo.iMinor,
+      VersionInfo.iBugfix,
+      VersionInfo.iBuild
     ]),
     Format(strSKUBuild, [
-      FVersionInfo.iMajor,
-      FVersionInfo.iMinor,
-      FVersionInfo.iBugfix,
-      FVersionInfo.iBuild
+      VersionInfo.iMajor,
+      VersionInfo.iMinor,
+      VersionInfo.iBugfix,
+      VersionInfo.iBuild
     ])
   );
-  FSplashScreen24 := LoadBitmap(hInstance, strSplashScreen24ImgResName);
-  (SplashScreenServices As IOTASplashScreenServices).AddPluginBitmap(
-    Format(strSplashScreenName, [
-      FVersionInfo.iMajor,
-      FVersionInfo.iMinor,
-      Copy(strRevision, FVersionInfo.iBugFix + 1, 1),
-      Application.Title
-    ]),
-    {$IFDEF D2007}
-    FSplashScreen24, // 2007 and above
-    {$ELSE}
-    FSplashScreen48, // 2006 ONLY
-    {$ENDIF}
-    False,
-    Format(strSplashScreenBuild, [
-      FVersionInfo.iMajor,
-      FVersionInfo.iMinor,
-      FVersionInfo.iBugfix,
-      FVersionInfo.iBuild
-    ])
-  );
+  AddSplashScreen();
 End;
 
 (**

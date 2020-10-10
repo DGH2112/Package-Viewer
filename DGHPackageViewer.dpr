@@ -29,7 +29,11 @@ uses
   System.Classes,
   DGHPackageViewerForm in 'Source\DGHPackageViewerForm.pas' {frmDGHPackageViewer},
   DGHPackageViewerProgressForm in 'Source\DGHPackageViewerProgressForm.pas' {frmDGHPackageViewerProgress},
-  DGHPackageViewerWizard in 'Source\DGHPackageViewerWizard.pas';
+  DGHPackageViewerWizard in 'Source\DGHPackageViewerWizard.pas',
+  DGHPackageViewerSplashScreen in 'Source\DGHPackageViewerSplashScreen.pas',
+  DGHPackageViewerFunctions in 'Source\DGHPackageViewerFunctions.pas',
+  DGHPackageViewerResourceStrings in 'Source\DGHPackageViewerResourceStrings.pas',
+  DGHPackageViewerConstants in 'Source\DGHPackageViewerConstants.pas';
 
 {$R *.res}
 
