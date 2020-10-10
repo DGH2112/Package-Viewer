@@ -47,7 +47,7 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
-        <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
+        <DCC_ExeOutput>.\</DCC_ExeOutput>
         <DCC_E>false</DCC_E>
         <DCC_N>false</DCC_N>
         <DCC_S>false</DCC_S>
@@ -113,6 +113,7 @@
         <DCCReference Include="Source\DGHPackageViewerFunctions.pas"/>
         <DCCReference Include="Source\DGHPackageViewerResourceStrings.pas"/>
         <DCCReference Include="Source\DGHPackageViewerConstants.pas"/>
+        <DCCReference Include="Source\DGHPackageViewerAboutBox.pas"/>
         <None Include="Source\CompilerDefinitions.inc"/>
         <None Include="Source\LibrarySuffixes.inc"/>
         <BuildConfiguration Include="Release">
@@ -143,7 +144,7 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="Win32\Debug\DGHPackageViewer.dll" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="DGHPackageViewer.dll" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>DGHPackageViewer.dll</RemoteName>
                         <Overwrite>true</Overwrite>

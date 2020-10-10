@@ -33,7 +33,8 @@ uses
   DGHPackageViewerSplashScreen in 'Source\DGHPackageViewerSplashScreen.pas',
   DGHPackageViewerFunctions in 'Source\DGHPackageViewerFunctions.pas',
   DGHPackageViewerResourceStrings in 'Source\DGHPackageViewerResourceStrings.pas',
-  DGHPackageViewerConstants in 'Source\DGHPackageViewerConstants.pas';
+  DGHPackageViewerConstants in 'Source\DGHPackageViewerConstants.pas',
+  DGHPackageViewerAboutBox in 'Source\DGHPackageViewerAboutBox.pas';
 
 {$R *.res}
 

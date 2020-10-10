@@ -5,7 +5,7 @@
   ability to browse the packages loaded in the IDE.
 
   @Author  David Hoyle
-  @Version 1.862
+  @Version 1.969
   @Date    10 Oct 2020
 
 **)
@@ -57,7 +57,8 @@ Uses
   DGHPackageViewerSplashScreen,
   DGHPackageViewerFunctions,
   DGHPackageViewerResourceStrings,
-  DGHPackageViewerConstants;
+  DGHPackageViewerConstants,
+  DGHPackageViewerAboutBox;
 
 (**
 
@@ -110,39 +111,8 @@ End;
 **)
 Constructor TDGHPackageViewerWizard.Create;
 
-Const
-  strSplashScreen48ImgResName = 'SplashScreen48';
-
-Var
-  VersionInfo      : TVersionInfo;
-  bmSplashScreen48   : HBITMAP;
-
 Begin
-  FAboutPluginIndex := -1;
-  bmSplashScreen48 := LoadBitmap(hInstance, strSplashScreen48ImgResName);
-  FAboutPluginIndex := (BorlandIDEServices As IOTAAboutBoxServices).AddPluginInfo(
-    Format(strSplashScreenName, [
-      VersionInfo.iMajor,
-      VersionInfo.iMinor,
-      Copy(strRevision, VersionInfo.iBugFix + 1, 1),
-      Application.Title
-    ]),
-    strPluginDescription,
-    bmSplashScreen48,
-    False,
-    Format(strSplashScreenBuild, [
-      VersionInfo.iMajor,
-      VersionInfo.iMinor,
-      VersionInfo.iBugfix,
-      VersionInfo.iBuild
-    ]),
-    Format(strSKUBuild, [
-      VersionInfo.iMajor,
-      VersionInfo.iMinor,
-      VersionInfo.iBugfix,
-      VersionInfo.iBuild
-    ])
-  );
+  FAboutPluginIndex := AddAboutBox();
   AddSplashScreen();
 End;
 
@@ -157,8 +127,7 @@ End;
 Destructor TDGHPackageViewerWizard.Destroy;
 
 Begin
-  If FAboutPluginIndex > -1 Then
-    (BorlandIDEServices As IOTAAboutBoxServices).RemovePluginInfo(FAboutPluginIndex);
+  RemoveAboutBox(FAboutPluginIndex);
   Inherited Destroy;
 End;
 
