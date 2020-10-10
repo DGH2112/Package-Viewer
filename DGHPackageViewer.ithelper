@@ -10,7 +10,7 @@ CompileWithBRCC32=0
 MajorVer=1
 MinorVer=0
 ReleaseVer=4
-BuildVer=125
+BuildVer=131
 ResourceName=ITHelperVersionInfo
 IncBuild.Make.Release=0
 IncBuild.Build.Release=0
@@ -35,7 +35,7 @@ ExclusionFiles=
 [VersionInfo]
 CompanyName=Season's Fall Music
 FileDescription=DGHPackageViewer: An IDE Expert to allow you to browse the loaded packages in the IDE.
-FileVersion=1.0.4.125
+FileVersion=1.0.4.131
 InternalName=DGHPackageViewer
 LegalCopyright=Season's Fall Music
 LegalTrademarks=Season's Fall Music

@@ -1,3 +1,15 @@
+(**
+  
+  This module defines a DLL to be loaded into the RAD Studio IDE as a plug-in. This plug-in allow the
+  user to view all the packages loaded into the RAD Studio IDE.
+
+  @Author  David Hoyle
+  @Version 1.029
+  @Date    09 Oct 2020
+
+  @nocheck EmptyBeginEnd
+  
+**)
 Library DGHPackageViewer;
 
 { Important note about DLL memory management: ShareMem must be the
