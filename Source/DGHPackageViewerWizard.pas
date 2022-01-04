@@ -131,37 +131,8 @@ End;
 Constructor TDGHPackageViewerWizard.Create;
 
 Begin
-<<<<<<< HEAD
-  {$IFDEF D2005}
-  FAboutPluginIndex := -1;
-  BuildNumber(FVersionInfo);
-  FSplashScreen48 := LoadBitmap(hInstance, 'SplashScreen48');
-  With FVersionInfo Do
-    FAboutPluginIndex := (BorlandIDEServices As IOTAAboutBoxServices).AddPluginInfo(
-      Format(strSplashScreenName, [iMajor, iMinor, Copy(strRevision, iBugFix + 1, 1),
-        Application.Title]),
-     'An IDE Expert to allow you to browse the loaded packages in the IDE.',
-     FSplashScreen48,
-     False,
-     Format(strSplashScreenBuild, [iMajor, iMinor, iBugfix, iBuild]),
-     Format('SKU Build %d.%d.%d.%d', [iMajor, iMinor, iBugfix, iBuild]));
-  FSplashScreen24 := LoadBitmap(hInstance, 'SplashScreen24');
-  With FVersionInfo Do
-    (SplashScreenServices As IOTASplashScreenServices).AddPluginBitmap(
-      Format(strSplashScreenName, [iMajor, iMinor, Copy(strRevision, iBugFix + 1, 1),
-        Application.Title]),
-      {$IFDEF D2007}
-      FSplashScreen24, // 2007 and above
-      {$ELSE}
-      FSplashScreen48, // 2006 ONLY
-      {$ENDIF}
-      False,
-      Format(strSplashScreenBuild, [iMajor, iMinor, iBugfix, iBuild]));
-  {$ENDIF}
-=======
   FAboutPluginIndex := AddAboutBox();
   AddSplashScreen();
->>>>>>> Release/1.0d
 End;
 
 (**
