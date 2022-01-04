@@ -4,8 +4,8 @@
   user to view all the packages loaded into the RAD Studio IDE.
 
   @Author  David Hoyle
-  @Version 1.029
-  @Date    10 Oct 2020
+  @Version 1.030
+  @Date    04 Jan 2022
 
   @license
 
