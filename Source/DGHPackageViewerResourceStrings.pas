@@ -3,8 +3,8 @@
   This module contains resources strings for use throughout the application.
 
   @Author  David Hoyle
-  @Version 1.115
-  @Date    10 Oct 2020
+  @Version 1.169
+  @Date    04 Jan 2022
   
   @license
 
@@ -33,8 +33,13 @@ Interface
 ResourceString
   (** A resource string for the name of the plug-in in the splash screen and about box. **)
   strSplashScreenName = 'DGH Package Viewer %d.%d%s for %s';
+  {$IFDEF DEBUG}
   (** A resource string for the description and build information on the splash screen and about box. **)
-  strSplashScreenBuild = 'Freeware by David Hoyle (Build %d.%d.%d.%d)';
+  strSplashScreenBuild = 'David Hoyle (c) 2020 License GNU GPL 3 (DEBUG Build %d.%d.%d.%d)';
+  {$ELSE}
+  (** A resource string for the description and build information on the splash screen and about box. **)
+  strSplashScreenBuild = 'David Hoyle (c) 2020 License GNU GPL 3 (Build %d.%d.%d.%d)';
+  {$ENDIF}
   (** A resource string to describe the purpose of the plug-in. **)
   strPluginDescription = 'An IDE Expert to allow you to browse the loaded packages in the IDE.';
   (** A resource string for the build reference. **)
