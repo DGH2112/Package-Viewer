@@ -2,11 +2,9 @@
 
 Author:   David Hoyle
 
-Version:  1.0d
+Version:  1.1
 
-Date:     10 Oct 2017
-
-Web Page: [DGH Package Viewer](http://www.davidghoyle.co.uk/WordPress/?page_id=1299)
+Date:     04 Jan 2022
 
 ## Overview
 
