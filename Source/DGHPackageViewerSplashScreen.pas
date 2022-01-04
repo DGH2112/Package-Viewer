@@ -3,8 +3,8 @@
   This module contains the code to add a splash screen entry to the RAD Studio IDE.
 
   @Author  David Hoyle
-  @Version 1.126
-  @Date    10 Oct 2020
+  @Version 1.234
+  @Date    04 Jan 2022
   
   @license
 
@@ -40,7 +40,11 @@ Uses
   ToolsAPI,
   SysUtils,
   Forms,
+  {$IFDEF RS110}
+  Graphics,
+  {$ELSE}
   Windows,
+  {$ENDIF}
   DGHPackageViewerFunctions,
   DGHPackageViewerResourceStrings,
   DGHPackageViewerConstants;
@@ -63,34 +67,41 @@ Const
   {$ENDIF}
 
 Var
-  VersionInfo : TVersionInfo;
+  VerInfo : TVersionInfo;
+  {$IFDEF RS110}
+  SplashScreenBitMap : TBitMap;
+  {$ELSE}
   bmSplashScreen: HBITMAP;
+  {$ENDIF RS110}
   SSS : IOTASplashScreenServices;
   
 Begin
-  TPackageViewerFunctions.BuildNumber(VersionInfo);
-  bmSplashScreen := LoadBitmap(hInstance, strDGHPackageViewerSplashScreenBitMap);
+  TPackageViewerFunctions.BuildNumber(VerInfo);
   If Supports(SplashScreenServices, IOTASplashScreenServices, SSS) Then
-    SSS.AddPluginBitmap(
-      Format(strSplashScreenName, [
-        VersionInfo.iMajor,
-        VersionInfo.iMinor,
-        Copy(strRevision, VersionInfo.iBugFix + 1, 1),
-        Application.Title
-      ]),
-      bmSplashScreen,
-      {$IFDEF DEBUG}
-      True
+    Begin
+      {$IFDEF RS110}
+      SplashScreenBitMap := TBitMap.Create;
+      Try
+        SplashScreenBitMap.LoadFromResourceName(hINstance, strDGHPackageViewerSplashScreenBitMap);
+        SSS.AddPluginBitmap(
+          Format(strSplashScreenName, [VerInfo.iMajor, VerInfo.iMinor, Copy(strRevision, VerInfo.iBugFix + 1, 1), Application.Title]),
+          [SplashScreenBitMap],
+          {$IFDEF DEBUG} True {$ELSE} False {$ENDIF DEBUG},
+          Format(strSplashScreenBuild, [VerInfo.iMajor, VerInfo.iMinor, VerInfo.iBugfix, VerInfo.iBuild])
+        );
+      Finally
+        SplashScreenBitMap.Free;
+      End;
       {$ELSE}
-      False
-      {$ENDIF DEBUG},
-      Format(strSplashScreenBuild, [
-        VersionInfo.iMajor,
-        VersionInfo.iMinor,
-        VersionInfo.iBugfix,
-        VersionInfo.iBuild
-      ])
-    );
+      bmSplashScreen := LoadBitmap(hInstance, strDGHPackageViewerSplashScreenBitMap);
+      SSS.AddPluginBitmap(
+        Format(strSplashScreenName, [VerInfo.iMajor, VerInfo.iMinor, Copy(strRevision, VerInfo.iBugFix + 1, 1), Application.Title]),
+        bmSplashScreen,
+        {$IFDEF DEBUG} True {$ELSE} False {$ENDIF DEBUG},
+        Format(strSplashScreenBuild, [VerInfo.iMajor, VerInfo.iMinor, VerInfo.iBugfix, VerInfo.iBuild])
+      );
+      {$ENDIF RS10}
+    End;
 End;
 
 End.
