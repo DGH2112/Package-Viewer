@@ -3,8 +3,8 @@
   This module contains functions for use throughout the application.
 
   @Author  David Hoyle
-  @Version 1.327
-  @Date    10 Oct 2020
+  @Version 1.329
+  @Date    04 Jan 2022
   
   @license
 
@@ -74,17 +74,17 @@ Uses
 **)
 Class Procedure TPackageViewerFunctions.ApplyTheming(Const Component: TComponent);
 
-{$IFDEF DXE102}
+{$IFDEF RS102}
 Var
   ITS : IOTAIDEThemingServices;
-{$ENDIF DXE102}
+{$ENDIF RS102}
   
 Begin
-  {$IFDEF DXE102}
+  {$IFDEF RS102}
   If Supports(BorlandIDEServices, IOTAIDEThemingServices, ITS) Then
     If ITS.IDEThemingEnabled Then
       ITS.ApplyTheme(Component);
-  {$ENDIF DXE102}
+  {$ENDIF RS102}
 End;
 
 (**
@@ -145,29 +145,29 @@ End;
 Class Procedure TPackageViewerFunctions.RegisterFormClassForTheming(Const AFormClass : TCustomFormClass;
   Const Component : TComponent = Nil);
 
-{$IFDEF DXE102}
+{$IFDEF RS102}
 Var
-  {$IFDEF DXE104} // Breaking change to the Open Tools API - They fixed the wrongly defined interface
+  {$IFDEF RS104} // Breaking change to the Open Tools API - They fixed the wrongly defined interface
   ITS : IOTAIDEThemingServices;
   {$ELSE}
   ITS : IOTAIDEThemingServices250;
-  {$ENDIF DXE104}
-{$ENDIF DXE102}
+  {$ENDIF RS104}
+{$ENDIF RS102}
   
 Begin
-  {$IFDEF DXE102}
-  {$IFDEF DXE104}
+  {$IFDEF RS102}
+  {$IFDEF RS104}
   If Supports(BorlandIDEServices, IOTAIDEThemingServices, ITS) Then
   {$ELSE}
   If Supports(BorlandIDEServices, IOTAIDEThemingServices250, ITS) Then
-  {$ENDIF DXE104}
+  {$ENDIF RS104}
     If ITS.IDEThemingEnabled Then
       Begin
         ITS.RegisterFormClass(AFormClass);
         If Assigned(Component) Then
           ITS.ApplyTheme(Component);
       End;
-  {$ENDIF DXE102}
+  {$ENDIF RS102}
 End;
 
 End.

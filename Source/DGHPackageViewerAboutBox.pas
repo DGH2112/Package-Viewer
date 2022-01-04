@@ -3,8 +3,8 @@
   This module contains code to installed and un-install an about box in the RAD Studio IDE.
 
   @Author  David Hoyle
-  @Version 1.173
-  @Date    10 Oct 2020
+  @Version 1.314
+  @Date    04 Jan 2022
   
   @license
 
@@ -35,11 +35,17 @@ Interface
   
 Implementation
 
+{$INCLUDE CompilerDefinitions.inc}
+
 Uses
   ToolsAPI,
   SysUtils,
   Forms,
+  {$IFDEF RS110}
+  Graphics,
+  {$ELSE}
   Windows,
+  {$ENDIF RS110}
   DGHPackageViewerFunctions,
   DGHPackageViewerConstants,
   DGHPackageViewerResourceStrings;
@@ -61,42 +67,46 @@ Const
   strSplashScreen = 'SplashScreen48';
 
 Var
-  VersionInfo: TVersionInfo;
+  VerInfo: TVersionInfo;
+  {$IFDEF RS110}
+  AboutBoxBitMap : TBitMap;
+  {$ELSE}
   bmSplashScreen: HBITMAP;
+  {$ENDIF RS110}
   ABS : IOTAAboutBoxServices;
 
 Begin
   Result := -1;
-  TPackageViewerFunctions.BuildNumber(VersionInfo);
-  bmSplashScreen := LoadBitmap(hInstance, strSplashScreen);
+  TPackageViewerFunctions.BuildNumber(VerInfo);
   If Supports(BorlandIDEServices, IOTAAboutBoxServices, ABS) Then
-    Result := ABS.AddPluginInfo(
-      Format(strSplashScreenName, [
-        VersionInfo.iMajor,
-        VersionInfo.iMinor,
-        Copy(strRevision, VersionInfo.iBugFix + 1, 1),
-        Application.Title
-      ]),
-      strPluginDescription,
-      bmSplashScreen,
-      {$IFDEF DEBUG}
-      True
+    Begin
+      {$IFDEF RS110}
+      AboutBoxBitMap := TBitMap.Create;
+      Try
+        AboutBoxBitMap.LoadFromResourceName(hInstance, strSplashScreen);
+        Result := ABS.AddPluginInfo(
+          Format(strSplashScreenName, [VerInfo.iMajor, VerInfo.iMinor, Copy(strRevision, VerInfo.iBugFix + 1, 1), Application.Title]),
+          strPluginDescription,
+          [AboutBoxBitMap],
+          {$IFDEF DEBUG} True {$ELSE} False {$ENDIF DEBUG},
+          Format(strSplashScreenBuild, [VerInfo.iMajor, VerInfo.iMinor, VerInfo.iBugfix, VerInfo.iBuild]),
+          Format(strSKUBuild, [VerInfo.iMajor, VerInfo.iMinor, VerInfo.iBugfix, VerInfo.iBuild])
+        );
+      Finally
+        AboutBoxBitMap.Free;
+      End;
       {$ELSE}
-      False
-      {$ENDIF DEBUG},
-      Format(strSplashScreenBuild, [
-        VersionInfo.iMajor,
-        VersionInfo.iMinor,
-        VersionInfo.iBugfix,
-        VersionInfo.iBuild
-      ]),
-      Format(strSKUBuild, [
-        VersionInfo.iMajor,
-        VersionInfo.iMinor,
-        VersionInfo.iBugfix,
-        VersionInfo.iBuild
-      ])
-    );
+      bmSplashScreen := LoadBitmap(hInstance, strSplashScreen);
+      Result := ABS.AddPluginInfo(
+        Format(strSplashScreenName, [VerInfo.iMajor, VerInfo.iMinor, Copy(strRevision, VerInfo.iBugFix + 1, 1), Application.Title]),
+        strPluginDescription,
+        bmSplashScreen,
+        {$IFDEF DEBUG} True {$ELSE} False {$ENDIF DEBUG},
+        Format(strSplashScreenBuild, [VerInfo.iMajor, VerInfo.iMinor, VerInfo.iBugfix, VerInfo.iBuild]),
+        Format(strSKUBuild, [VerInfo.iMajor, VerInfo.iMinor, VerInfo.iBugfix, VerInfo.iBuild])
+      );
+      {$ENDIF RS110}
+    End;
 End;
 
 (**
