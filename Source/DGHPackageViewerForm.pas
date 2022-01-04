@@ -4,8 +4,8 @@
   RAD Studio IDE in a tree format.
 
   @Author  David Hoyle
-  @Version 1.817
-  @Date    10 Oct 2020
+  @Version 1.819
+  @Date    04 Jan 2022
 
   @license
 
@@ -67,9 +67,9 @@ Type
     procedure btnFindClick(Sender: TObject);
     procedure dlgFindFind(Sender: TObject);
   Strict Private
-    {$IFDEF DXE102}
+    {$IFDEF RS102}
     FStyleServices : TCustomStyleServices;
-    {$ENDIF DXE102}
+    {$ENDIF RS102}
   Strict Protected
     Procedure LoadSettings;
     Procedure SaveSettings;
@@ -279,10 +279,10 @@ End;
 **)
 Procedure TfrmDGHPackageViewer.FormCreate(Sender: TObject);
 
-{$IFDEF DXE102}
+{$IFDEF RS102}
 Var
   ITS : IOTAIDEThemingServices;
-{$ENDIF DXE102}
+{$ENDIF RS102}
   
 Begin
   DoubleBuffered := True;
@@ -292,12 +292,12 @@ Begin
   LoadSettings;
   TPackageViewerFunctions.RegisterFormClassForTheming(TfrmDGHPackageViewer);
   TPackageViewerFunctions.ApplyTheming(Self);
-  {$IFDEF DXE102}
+  {$IFDEF RS102}
   FStyleServices := Nil;
   If Supports(BorlandIDEServices, IOTAIDEThemingServices, ITS) Then
     If ITS.IDEThemingEnabled Then
       FStyleServices := ITS.StyleServices;
-  {$ENDIF DXE102}
+  {$ENDIF RS102}
 End;
 
 (**
@@ -594,13 +594,13 @@ Begin
         Sender.Canvas.Font.Color := clWindowText
       Else
         Sender.Canvas.Font.Color := clGrayText;
-      {$IFDEF DXE102}
+      {$IFDEF RS102}
       If Assigned(FStyleServices) Then
         Begin
           Sender.Canvas.Brush.Color := FStyleServices.GetSystemColor(Sender.Canvas.Brush.Color);
           Sender.Canvas.Font.Color := FStyleServices.GetSystemColor(Sender.Canvas.Font.Color);
         End;
-      {$ENDIF DXE102}
+      {$ENDIF RS102}
     End;
   {$ENDIF}
 End;
